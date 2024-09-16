@@ -1,0 +1,3 @@
+C:/Users/Artem/CLionProjects/bigdata/cmake-build-debug/CMakeFiles/bigdata.dir
+C:/Users/Artem/CLionProjects/bigdata/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Artem/CLionProjects/bigdata/cmake-build-debug/CMakeFiles/rebuild_cache.dir
