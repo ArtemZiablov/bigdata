@@ -18,34 +18,34 @@ pair<int, int> findMinMaxPart(const vector<int>& data, int start, int end) {
 // MapReduce метод
 pair<int, int> findMinMaxMapReduce(const vector<int>& data, int numThreads) {
     vector<thread> threads;
-    vector<pair<int, int>> results(numThreads);
+    vector<pair<int, int>> results(numThreads);  // Вектор результатів для кожного потоку (min, max)
 
     int dataSize = data.size();
-    int chunkSize = dataSize / numThreads;
+    int chunkSize = dataSize / numThreads;  // розмір підмасиву
 
-    // map - розбиваємо на підзадачі
+    // MAP-фаза - розбиваємо дані на підзадачі та запускаємо кожен потік для обробки свого підмасиву
     for (int i = 0; i < numThreads; ++i) {
         int start = i * chunkSize;
-        int end = min((i + 1) * chunkSize, dataSize);
+        int end = (i == numThreads - 1) ? dataSize : (i + 1) * chunkSize;
 
-        // запускаємо кожен потік
+        // Створюємо потік для обробки підмасиву
         threads.emplace_back([&results, &data, i, start, end]() {
             results[i] = findMinMaxPart(data, start, end);
         });
     }
 
+    // Чекаємо завершення всіх потоків
     for (auto& t : threads) {
         t.join();
     }
 
-    // reduce - об'єднуємо результати з усіх потоків
-    // ініціалізуємо min та max
+    // REDUCE-фаза - об'єднуємо результати з усіх потоків
+    // Ініціалізуємо глобальні мінімум і максимум початковими значеннями з першого потоку
     int minNum = results[0].first;
     int maxNum = results[0].second;
 
-    // знаходимо мінімальний з мінімальних, та максимальний з максимальних
+    // Обробляємо результати кожного потоку, шукаючи глобальний мінімум і максимум
     for (int i = 1; i < numThreads; ++i) {
-        lock_guard<mutex> lock(mtx);
         minNum = min(minNum, results[i].first);
         maxNum = max(maxNum, results[i].second);
     }
@@ -61,8 +61,9 @@ pair<int, int> findMinMaxStandard(const vector<int>& data) {
 
 int main() {
     // створюємо дууже великий набір чисел (один мільярд чисел)
-    const int size = 1000000000;
+    const int size = 10000;
     vector<int> data(size);
+    cout << "Vector size: " << size << endl;
 
     for (int i = 0; i < size; ++i) {
         data[i] = rand() % 100000 - 50000;
