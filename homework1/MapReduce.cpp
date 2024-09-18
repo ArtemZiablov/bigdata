@@ -4,10 +4,9 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
+#include <random>
 
 using namespace std;
-
-mutex mtx;
 
 // метод для знаходження мінімума та максимума у підмасиві
 pair<int, int> findMinMaxPart(const vector<int>& data, int start, int end) {
@@ -61,12 +60,16 @@ pair<int, int> findMinMaxStandard(const vector<int>& data) {
 
 int main() {
     // створюємо дууже великий набір чисел (один мільярд чисел)
-    const int size = 10000;
+    const int size = 1000000000;
     vector<int> data(size);
     cout << "Vector size: " << size << endl;
 
+    random_device rd; // створюємо random
+    mt19937 gen(rd());
+    uniform_int_distribution<> dis(-5000, 10000);
+
     for (int i = 0; i < size; ++i) {
-        data[i] = rand() % 100000 - 50000;
+        data[i] = dis(gen);
     }
 
     int numThreads = thread::hardware_concurrency();
