@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Завантаження датасету з вказанням опції для уникнення змішаних типів
-file_path = 'air_quality.csv'
+file_path = 'C:\\Users\\Artem\\Downloads\\Taiwan Air Quality Index Data 2016~2024\\air_quality.csv'
 data = pd.read_csv(file_path, low_memory=False)
 
 # Вибір числових колонок для PCA
